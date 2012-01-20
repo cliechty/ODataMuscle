@@ -52,6 +52,17 @@ namespace ODataMuscle
             return entities.Expand(propertyName);
         }
 
+        public static DataServiceQuery<T> Expand<T>(this DataServiceQuery<T> entities,
+            params Expression<Func<T, object>>[] propertyExpressions)
+        {
+            foreach (Expression<Func<T, object>> propertyExpression in propertyExpressions)
+            {
+                string propertyName = ExpandPropertyName(propertyExpression);
+                entities = entities.Expand(propertyName);
+            }
+            return entities;
+        }
+
         public static string Expand<T, TProperty>(this IEnumerable<T> collection,
             Expression<Func<T, TProperty>> propertyExpressions)
         {

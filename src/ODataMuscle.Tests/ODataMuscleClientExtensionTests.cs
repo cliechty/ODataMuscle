@@ -92,6 +92,22 @@ namespace ODataMuscle.Tests
             dataServiceQuery.UriShouldContain("$expand=ChildrenAsCollection/Parent");
         }
 
+        [Test]
+        public void Should_expand_a_list_of_properties()
+        {
+            var dataServiceQuery = _testEntities.Parents.Expand(parent => parent.Child, parent => parent.Children);
+
+            dataServiceQuery.UriShouldContain("$expand=Child,Children");
+        }
+
+        [Test]
+        public void Should_expand_a_list_of_properties_including_nested_collections()
+        {
+            var dataServiceQuery = _testEntities.Parents.Expand(parent => parent.Children.Expand(x => x.Parent), parent => parent.Child);
+
+            dataServiceQuery.UriShouldContain("$expand=Children/Parent,Child");
+        }
+
 
         [Test]
         public void Should_be_able_to_AddLink()
